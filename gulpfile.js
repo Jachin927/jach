@@ -1,6 +1,7 @@
 "use strict";
 
 const gulp = require('gulp');
+const fs = require('fs');
 const browserSync = require('browser-sync').create();
 const reload = browserSync.reload;
 const plugins  = require('gulp-load-plugins')();
@@ -19,6 +20,25 @@ gulp.task('serve', () => {
     }
   });
 });
+
+gulp.task('createFile', () => {
+  const fileArray = [`./${serve.folder}`, `./${serve.folder}/font`, `./${serve.folder}/images`, `./${serve.folder}/js`, `./${serve.folder}/media`, `./${serve.folder}/template`, `./${serve.folder}/css/vendor`, `./${serve.folder}/js/vendor`, `./${serve.folder}/index.html`]
+  fs.stat(`./${serve.folder}`, (err) => {
+    if (err) {
+      for (let i = 0; i < fileArray.length; i++) {
+        if (i === (fileArray.length - 1)) {
+          fs.writeFile(fileArray[i], '', (err) => {
+            if (err) throw err;
+          });
+        } else {
+          fs.mkdir(fileArray[i], { recursive: true }, (err) => {
+            if (err) throw err;
+          })
+        }
+      }
+    }
+  })
+})
 
 // Api 
 gulp.task('html', () => {
@@ -136,7 +156,7 @@ gulp.task('initial', gulp.series('clean', 'other', 'html', 'less', 'sass', 'base
 gulp.task('building', gulp.series('d_Dist', 'b_Other', 'b_Html', 'b_Css', 'b_Js', 'b_baseJs', 'rev', 'd_rev'))
 
 // dev command
-gulp.task('default',gulp.parallel('serve', 'initial'));
+gulp.task('dev',gulp.parallel('serve','createFile', 'initial'));
 
 // build command
 gulp.task('build', gulp.series('clean', 'other', 'html', 'less', 'sass', 'base', 'building'))

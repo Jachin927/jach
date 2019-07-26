@@ -4,7 +4,7 @@
   "description": "Simple and easy",
   "main": "gulpfile.js",
   "scripts": {
-    "dev": "gulp",
+    "dev": "gulp dev",
     "start": "npm run dev",
     "build": "gulp build"
   },

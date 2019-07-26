@@ -32,19 +32,21 @@ SAEO
 
 ##注意事项说明
 
-1. config.js 可配置开发环境下的端口号，索引文件夹，索引文件以及打包时是否启用 hash ，是否对文件进行压缩
+1. 执行 npm run dev 命令时, 如果没有 app 文件夹，则会默认创建
 
-2. css, js 文件夹下的 vendor 文件夹打包时不会进行处理, 建议将外来引用的 css, js 放入 vendor , 如引入的 jQuery 源文件, 放到对应 js/vendor 下;
+2. config.js 可配置开发环境下的端口号，索引文件夹，索引文件以及打包时是否启用 hash ，是否对文件进行压缩
 
-3. 关于样式的打包问题: 执行打包时, 样式文件将进行合并为一个命名为 main.css 的文件, less, sass 将会编译后进行合并, 所以建议开发时, 直接外链引入 main.css 即可
+3. css, js 文件夹下的 vendor 文件夹打包时不会进行处理, 建议将外来引用的 css, js 放入 vendor , 如引入的 jQuery 源文件, 放到对应 js/vendor 下;
+
+4. 关于样式的打包问题: 执行打包时, 样式文件将进行合并为一个命名为 main.css 的文件, less, sass 将会编译后进行合并, 所以建议开发时, 直接外链引入 main.css 即可
   
   ```javascript
     <link rel="stylesheet" type="text/css" href="css/main.css">
   ```
 
-4. template 文件夹为模板文件夹, 可将页面的 header, footer 放到此处, 打包时将会忽略此文件夹
+5. template 文件夹为模板文件夹, 可将页面的 header, footer 放到此处, 打包时将会忽略此文件夹
 
-5. 模板引入的命令为 
+6. 模板引入的命令为 
   ```javascript
     // 基本命令行
     @@include("./template/head.html")
