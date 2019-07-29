@@ -1,14 +1,14 @@
-SAEO
+GAMU
 ===========================
-saeo 基于 Browsersync 和 gulp 开发, 集成了前端调试, 构建, 编译等一系列开发流程, 帮助开发者提高开发效率;
+gamu 基于 Browsersync 和 gulp 开发, 集成了前端调试, 构建, 编译等开发流程, 帮助开发者提高开发效率;
 
 
-##命令
-1. npm install  // 安装node运行环境
+##命令步骤
+1. npm i -g  // 全局安装依赖
 
-2. npm run dev / npm start   // 启动本地调试
+2. gm init / gm i   // 初始化
 
-3. npm run build // 编译静态文件
+3. gm build // 打包静态文件
 
 ##目录结构描述
 
@@ -26,15 +26,17 @@ saeo 基于 Browsersync 和 gulp 开发, 集成了前端调试, 构建, 编译�
 │   ├── media                   // 多媒体文件夹
 │   └── template                // 模板文件夹
 │
+├── bin
+│
 ├── gulpfile.js
 │
-└── config.js                   // 配置文件
+└── config.js                   // 自定义配置文件
 
 ```
 
 ##注意事项说明
 
-1. 执行 npm run dev 命令时, 如果没有 app 文件夹，则会默认创建
+1. 执行 gm init 命令时, 如果没有 app 文件夹，则会默认创建
 
 2. config.js 可配置开发环境下的端口号，索引文件夹，索引文件以及打包时是否启用 hash ，是否对文件进行压缩
 
@@ -88,7 +90,7 @@ saeo 基于 Browsersync 和 gulp 开发, 集成了前端调试, 构建, 编译�
     ...
     </div>
   ```
-  **更多样式可参考 [gulp-file-include](https://www.npmjs.com/package/gulp-include-file) 介绍**
+  **更多详情可参考 [gulp-file-include](https://www.npmjs.com/package/gulp-include-file) 介绍**
 
   #### 注意！注意！注意！
   #### 参数必须用双引号包裹, 否则报错

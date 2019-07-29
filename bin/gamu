@@ -1,0 +1,35 @@
+#! /usr/bin/env node
+
+process.env.NODE_PATH = __dirname + '/../node_modules/'; // 校对路径
+
+const program = require('commander');
+const shell = require('shelljs');
+
+program
+  .version(require('../package').version)
+
+program
+  .usage('<command>')
+
+
+program
+  .command('init')
+  .description('gamu init...')
+  .alias('i')
+  .action(() => {
+    shell.exec('gulp dev')
+  })
+
+program
+.command('build')
+.description('gamu building...')
+.alias('b')
+.action(() => {
+  shell.exec('gulp build')
+})
+
+program.parse(process.argv)
+ 
+if(!program.args.length){
+  program.help()
+}

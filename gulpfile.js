@@ -73,7 +73,6 @@ gulp.task('clean', () => {
   return del('.tmp');
 });
 
-
 //build Api
 gulp.task('b_Html', () => {
   return gulp.src(`.tmp/*.html`)
@@ -138,7 +137,6 @@ gulp.task('d_rev', () => {
   return del('dist/rev');
 })
 
-
 // dev watch
 gulp.task('watch', () => {
   gulp.watch(`${serve.folder}/**/*.html`, gulp.parallel('html'));
@@ -152,11 +150,11 @@ gulp.task('watch', () => {
 // dev init
 gulp.task('initial', gulp.series('clean', 'other', 'html', 'less', 'sass', 'base', 'watch'));
 
-// building
-gulp.task('building', gulp.series('d_Dist', 'b_Other', 'b_Html', 'b_Css', 'b_Js', 'b_baseJs', 'rev', 'd_rev'))
-
 // dev command
 gulp.task('dev',gulp.parallel('serve','createFile', 'initial'));
+
+// building
+gulp.task('building', gulp.series('d_Dist', 'b_Other', 'b_Html', 'b_Css', 'b_Js', 'b_baseJs', 'rev', 'd_rev'))
 
 // build command
 gulp.task('build', gulp.series('clean', 'other', 'html', 'less', 'sass', 'base', 'building'))
