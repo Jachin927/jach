@@ -20,7 +20,7 @@ fs.access(`${devPath}/config.js`, (err) => {
 function createFile () {
 
   //config file
-  const configArray = ['config.js', 'gulpfile.js', 'package.json', 'README.md']
+  const configArray = ['package.json', 'config.js', 'gulpfile.js', 'README.md']
   for (let i = 0; i < configArray.length; i++) {
     fs.access(`${devPath}/${configArray[i]}`, (err) => {
       if(err) {
@@ -43,9 +43,9 @@ function createFile () {
     `./${serve ? serve.folder : 'app'}/css/vendor`,
     `./${serve ? serve.folder : 'app'}/js/vendor`
   ]
-  fs.stat(fileArray[0], (err) => {
-    if (err) {
-      for (let i = 0; i < fileArray.length; i++) {
+  for (let i = 0; i < fileArray.length; i++) {
+    fs.stat(fileArray[i], (err) => {
+      if (err) {
         if (i === 1) {
           writeIndex(fileArray[i]);
         } else {
@@ -54,15 +54,20 @@ function createFile () {
           })
         }
       }
-    }
-  })
+    })
+  }
+
+  // run dev
+  setTimeout(() => {
+    shell.exec(`npm install`);
+  }, 500);
 
   const time = new Date();
   const hour = time.getHours() > 10 ? time.getHours() : 0 + time.getHours().toString();
   const min = time.getMinutes() > 10 ? time.getMinutes() : 0 + time.getMinutes().toString();
   const sec = time.getSeconds() > 10 ? time.getSeconds() : 0 + time.getSeconds().toString();
 
-  console.log(` -------------------------------- \n [${hour}:${min}:${sec}] CreateFile usccess \n --------------------------------`);
+  console.log(` -------------------------------- \n [${hour}:${min}:${sec}] Creating File...  \n --------------------------------`);
 }
 
 function writeIndex (filePath) {
@@ -92,7 +97,7 @@ program
   .description('gamu dev...')
   .alias('d')
   .action(() => {
-    shell.exec(`gulp dev `);
+    shell.exec(`gulp dev`);
   })
 
 program
