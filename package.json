@@ -1,14 +1,13 @@
 {
   "name": "gamu",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "gamu",
   "main": "bin/gamu",
-  "scripts": {
-  },
+  "scripts": {},
   "author": "Jachin",
   "license": "ISC",
   "bin": {
-    "gm": "./bin/gamu"
+    "gm": "bin/gamu"
   },
   "dependencies": {
     "babel-core": "^6.26.3",

@@ -4,6 +4,74 @@ process.env.NODE_PATH = __dirname + '/../node_modules/'; // 校对路径
 
 const program = require('commander');
 const shell = require('shelljs');
+const path = require('path');
+const fs = require('fs');
+
+const basePath = __dirname.slice(0, __dirname.length - 4).replace(/\\/g,"/");
+const devPath = path.resolve('./').replace(/\\/g,"/");
+
+let serve;
+fs.access(`${devPath}/config.js`, (err) => {
+  if (!err) {
+    serve = require('../config').serve;
+  }
+});
+
+function createFile () {
+
+  //config file
+  const configArray = ['config.js', 'gulpfile.js', 'package.json', 'README.md']
+  for (let i = 0; i < configArray.length; i++) {
+    fs.access(`${devPath}/${configArray[i]}`, (err) => {
+      if(err) {
+        fs.copyFile(`${basePath}/${configArray[i]}`, `${devPath}/${configArray[i]}`, (err) => {
+          if (err) {throw err};
+        })
+      }
+    });
+  }
+
+  // dev file
+  const fileArray = [
+    `./${serve ? serve.folder : 'app'}`,
+    `./${serve ? serve.folder : 'app'}/index.html`,
+    `./${serve ? serve.folder : 'app'}/font`,
+    `./${serve ? serve.folder : 'app'}/images`,
+    `./${serve ? serve.folder : 'app'}/js`,
+    `./${serve ? serve.folder : 'app'}/media`,
+    `./${serve ? serve.folder : 'app'}/template`,
+    `./${serve ? serve.folder : 'app'}/css/vendor`,
+    `./${serve ? serve.folder : 'app'}/js/vendor`
+  ]
+  fs.stat(fileArray[0], (err) => {
+    if (err) {
+      for (let i = 0; i < fileArray.length; i++) {
+        if (i === 1) {
+          writeIndex(fileArray[i]);
+        } else {
+          fs.mkdir(fileArray[i], { recursive: true }, (err) => {
+            if (err) throw err;
+          })
+        }
+      }
+    }
+  })
+
+  const time = new Date();
+  const hour = time.getHours() > 10 ? time.getHours() : 0 + time.getHours().toString();
+  const min = time.getMinutes() > 10 ? time.getMinutes() : 0 + time.getMinutes().toString();
+  const sec = time.getSeconds() > 10 ? time.getSeconds() : 0 + time.getSeconds().toString();
+
+  console.log(` -------------------------------- \n [${hour}:${min}:${sec}] CreateFile usccess \n --------------------------------`);
+}
+
+function writeIndex (filePath) {
+  fs.writeFile(filePath, '', (err) => {
+    if (err) {
+      writeIndex(filePath)
+    };
+  });
+}
 
 program
   .version(require('../package').version)
@@ -11,22 +79,29 @@ program
 program
   .usage('<command>')
 
-
 program
   .command('init')
   .description('gamu init...')
   .alias('i')
   .action(() => {
-    shell.exec('gulp dev')
+    createFile();
   })
 
 program
-.command('build')
-.description('gamu building...')
-.alias('b')
-.action(() => {
-  shell.exec('gulp build')
-})
+  .command('dev')
+  .description('gamu dev...')
+  .alias('d')
+  .action(() => {
+    shell.exec(`gulp dev `);
+  })
+
+program
+  .command('build')
+  .description('gamu building...')
+  .alias('b')
+  .action(() => {
+    shell.exec('gulp build')
+  })
 
 program.parse(process.argv)
  
