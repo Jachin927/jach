@@ -87,7 +87,6 @@ program
 program
   .command('init')
   .description('gamu init...')
-  .alias('i')
   .action(() => {
     createFile();
   })
@@ -95,17 +94,15 @@ program
 program
   .command('dev')
   .description('gamu dev...')
-  .alias('d')
   .action(() => {
-    shell.exec(`gulp dev`);
+    require('gulp/bin/gulp');
   })
 
 program
   .command('build')
   .description('gamu building...')
-  .alias('b')
   .action(() => {
-    shell.exec('gulp build')
+    require('gulp/bin/gulp');
   })
 
 program.parse(process.argv)
