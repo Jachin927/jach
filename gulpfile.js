@@ -46,7 +46,7 @@ gulp.task('less', () => {
     .pipe(gulp.dest('.tmp'));
 });
 gulp.task('other', () =>{
-  return gulp.src([`${serve.folder}/**/*`, `!${serve.folder}/**/*.{html,less,sass,css,js}`])
+  return gulp.src([`${serve.folder}/**/*.*`, `!${serve.folder}/**/*.{html,less,sass,css,js}`])
   .pipe(gulp.dest('.tmp'));
 })
 gulp.task('clean', () => {
@@ -123,6 +123,7 @@ gulp.task('watch', () => {
   gulp.watch(`${serve.folder}/**/*.{css,js}`, gulp.parallel('base'));
   gulp.watch(`${serve.folder}/**/*.scss`, gulp.parallel('sass'));
   gulp.watch(`${serve.folder}/**/*.less`, gulp.parallel('less'));
+  gulp.watch([`${serve.folder}/**/*.*`, `!${serve.folder}/**/*.{html,less,sass,css,js}`], gulp.parallel('other'));
 
   gulp.watch(`.tmp/**/*`).on('added', reload);
   gulp.watch(`.tmp/**/*`).on('change', reload);
