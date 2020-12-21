@@ -1,0 +1,125 @@
+#! /usr/bin/env node
+
+const program = require('commander');
+const fs = require('fs');
+
+const basePath = __dirname.slice(0, __dirname.length - 4).replace(/\\/g, "/");
+const projectPath = process.cwd().replace(/\\/g, "/");
+
+let folder;
+
+// program
+function commandFun(source, command) {
+  if (command.length > 1) {
+    console.log(`\x1B[36m[jach init]\x1B[0m \x1B[31m command is Error! \x1B[0m`);
+  } else {
+    switch (command[0]) {
+      case 'init':
+        createConfig();
+        break;
+      case 'serve':
+        serveProject();
+        break;
+      case 'build':
+        buildProject();
+        break;
+    }
+
+  }
+}
+
+// init
+function createConfig() {
+  //config file
+  console.log(`\x1B[36m[jach init]\x1B[0m \x1B[34m create File... \x1B[0m`);
+  const configFile = 'config.js';
+
+  fs.stat(`${projectPath}/${configFile}`, (err) => {
+    if (err) {
+      folder = 'app';
+      fs.copyFile(`${basePath}/${configFile}`, `${projectPath}/${configFile}`, (err) => {
+        if (err) { throw err };
+      })
+    } else {
+      console.log(`\x1B[36m[jach init]\x1B[0m \x1B[34m config.js is already exists! \x1B[0m`);
+      folder = require(`${projectPath}/config.js`).serve.folder;
+    }
+    createFile();
+  });
+}
+
+function createFile() {
+  const fileArray = [
+    `js/vendor`,
+    `css/vendor`,
+    `images`,
+    `font`,
+    `media`,
+    `template`,
+    `index.html`,
+    `template/header.html`,
+  ]
+
+  fs.stat(`${projectPath}/${folder}`, (err) => {
+    if (err) {
+      console.log(`\x1B[36m[jach init]\x1B[0m \x1B[34m create Folder... \x1B[0m`);
+      fs.mkdir(`${projectPath}/${folder}`, { recursive: true }, (err) => { if (err) { throw err }; });
+      fs.mkdir(`${projectPath}/${folder}/${fileArray[0]}`, { recursive: true }, (err) => { if (err) { throw err }; });
+      fs.mkdir(`${projectPath}/${folder}/${fileArray[1]}`, { recursive: true }, (err) => { if (err) { throw err }; });
+      fs.mkdir(`${projectPath}/${folder}/${fileArray[2]}`, { recursive: true }, (err) => { if (err) { throw err }; });
+      fs.mkdir(`${projectPath}/${folder}/${fileArray[3]}`, { recursive: true }, (err) => { if (err) { throw err }; });
+      fs.mkdir(`${projectPath}/${folder}/${fileArray[4]}`, { recursive: true }, (err) => { if (err) { throw err }; });
+      fs.mkdir(`${projectPath}/${folder}/${fileArray[5]}`, { recursive: true }, (err) => { if (err) { throw err }; });
+      fs.copyFile(`${basePath}/app/${fileArray[6]}`, `${projectPath}/${folder}/${fileArray[6]}`, (err) => { if (err) { throw err }; })
+      fs.copyFile(`${basePath}/app/${fileArray[7]}`, `${projectPath}/${folder}/${fileArray[7]}`, (err) => { if (err) { throw err }; })
+      console.log(`\x1B[36m[jach init]\x1B[0m \x1B[32m create Success \x1B[0m`);
+    } else {
+      console.log(`\x1B[36m[jach init]\x1B[0m \x1B[34m serve folder is already exists! \x1B[0m`);
+    }
+  })
+}
+
+// serve
+function serveProject() {
+  folder = require(`${projectPath}/config.js`).serve.folder;
+
+  fs.stat(`${projectPath}/${folder}`, (err) => {
+    if (err) {
+      console.log(`\x1B[36m[jach init]\x1B[0m \x1B[31m config file was not found, please execute 'jach init' command first! \x1B[0m`);
+    } else {
+      process.argv.push('--gulpfile', basePath + '/gulpfile.js');
+      require('gulp/bin/gulp');
+    }
+  });
+}
+
+// build
+function buildProject() {
+  folder = require(`${projectPath}/config.js`).serve.folder;
+
+  fs.stat(`${projectPath}/${folder}`, (err) => {
+    if (err) {
+      console.log(`\x1B[36m[jach init]\x1B[0m \x1B[31m config file was not found, please execute 'jach init' command first! \x1B[0m`);
+    } else {
+      process.argv.push('--gulpfile', basePath + '/gulpfile.js');
+      require('gulp/bin/gulp');
+    }
+  });
+
+}
+
+
+// 版本命令
+program
+  .version(require('../package').version, '-v,--version')
+  .parse(process.argv);
+
+// 通用命令
+program
+  .command('init')
+  .command('serve')
+  .command('build')
+  .action((source, command) => {
+    commandFun(source, command)
+  })
+  .parse(process.argv);
